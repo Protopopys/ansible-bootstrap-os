@@ -1,0 +1,16 @@
+---
+- name: Bootstrap | Check if bootstrap is needed
+  raw: PACKAGE=$(rpm -qa --qf "%{NAME}\n" |grep -e ^{{ item }}$ | tr -d '\n' | tr -d '\r') ; if [ -z "${PACKAGE}" ]; then exit 1 ; fi ;
+  register: need_bootstrap
+  failed_when: false
+  changed_when: false
+  with_items: "{{ required_packages }}"
+
+- name: Bootstrap | Install Python and modules
+  raw: apt-get update && apt-get install -y {{ required_packages|join(" ") }}
+  when: need_bootstrap.results | map(attribute='rc') | sort | last | bool
+  with_items: "{{ required_packages }}"
+
+- name: Bootstrap | Setting fact - ansible_python_interpreter
+  set_fact:
+    ansible_python_interpreter: "/usr/bin/python"

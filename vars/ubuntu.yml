@@ -1,0 +1,6 @@
+---
+required_packages:
+  - python
+  - python-apt
+  - dbus
+  - module-init-tools

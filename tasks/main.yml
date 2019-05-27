@@ -1,0 +1,39 @@
+---
+- name: Fetch /etc/os-release
+  raw: cat /etc/os-release
+  register: os_release
+  changed_when: false
+
+- name: Set bootstrap_os
+  set_fact:
+    os_family: >-
+      {%- if 'Ubuntu' in os_release.stdout -%}
+      ubuntu
+      {%- elif 'altlinux' in os_release.stdout -%}
+      altlinux
+      {%- elif 'CentOS' in os_release.stdout -%}
+      centos
+      {%- endif -%}
+
+- name: loading platform variables
+  include_vars: "{{ os_family | lower }}.yml"
+
+- include_tasks: bootstrap-ubuntu.yml
+  when: os_family == "ubuntu"
+
+- include_tasks: bootstrap-altlinux.yml
+  when: os_family == "altlinux"
+
+- include_tasks: bootstrap-centos.yml
+  when: os_family == "centos"
+
+- import_tasks: setup-pipelining.yml
+
+- name: Bootstrap | Gathering facts
+  setup: {}
+
+- name: Bootstrap | Create remote_tmp for it is used by another module
+  file:
+    path: "{{ lookup('config', 'DEFAULT_REMOTE_TMP', on_missing='skip', wantlist=True) | first | default('~/.ansible/tmp') }}"
+    state: directory
+    mode: 0700

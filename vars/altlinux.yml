@@ -1,0 +1,7 @@
+---
+required_packages:
+  - kmod
+  - dbus
+  - python
+  - python-module-apt
+  - python-module-simplejson
