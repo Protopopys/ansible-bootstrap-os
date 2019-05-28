@@ -12,7 +12,24 @@
     state: present
   when: fastestmirror.stat.exists
 
+- name: Bootstrap | Install epel-release
+  yum:
+    name: epel-release
+    state: present
+
 - name: Bootstrap | Install packages requirements for bootstrap
   yum:
+    name: "{{ base_packages }}"
+    state: present
+  notify:
+    - Bootstrap | Handlers | Setting fact - ansible_python_interpreter
+
+- name: Bootstrap | flush handlers
+  meta: flush_handlers
+
+- name: Bootstrap | Install required packages
+  package:
     name: "{{ required_packages }}"
     state: present
+  notify:
+    - Bootstrap | Handlers | Gathering facts
