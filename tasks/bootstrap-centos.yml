@@ -12,10 +12,7 @@
     state: present
   when: fastestmirror.stat.exists
 
-- name: Bootstrap | Install epel-release
-  yum:
-    name: epel-release
-    state: present
+- include_role: protopopys.ansible_epel_repo
 
 - name: Bootstrap | Install packages requirements for bootstrap
   yum:
@@ -28,7 +25,7 @@
   meta: flush_handlers
 
 - name: Bootstrap | Install required packages
-  package:
+  yum:
     name: "{{ required_packages }}"
     state: present
   notify:
