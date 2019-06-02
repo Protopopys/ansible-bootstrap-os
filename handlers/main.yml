@@ -1,7 +1,2 @@
 ---
-- name: Bootstrap | Handlers | Setting fact - ansible_python_interpreter
-  set_fact:
-    ansible_python_interpreter: "/usr/bin/python3"
-
-- name: Bootstrap | Handlers | Gathering facts
-  setup: {}
+# handlers file for bootstrap-os

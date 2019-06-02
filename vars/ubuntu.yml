@@ -1,18 +1,6 @@
 ---
-base_packages:
-  - sudo
-  - python3-minimal
-  - python3-apt
-  - python3-simplejson
-
 required_packages:
+  - python
+  - python-apt
   - dbus
-  - acl
-  - ca-certificates
   - module-init-tools
-  - apt-transport-https
-  - gzip
-  - lvm2
-  - tar
-  - unzip
-  - xz-utils
