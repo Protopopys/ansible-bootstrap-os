@@ -1,0 +1,21 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: AltLinux8
+    image: alt:p8
+    pre_build_image: true
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+scenario:
+  name: alt
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

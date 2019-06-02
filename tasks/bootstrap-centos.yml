@@ -12,7 +12,43 @@
     state: present
   when: fastestmirror.stat.exists
 
+- name: Bootstrap | Getting facts
+  setup:
+    filter: ansible_*
+
+- name: Bootstrap | Check if EPEL repo is already configured
+  stat:
+    path: "{{ epel_repo_file_path }}"
+  register: epel_repofile_result
+
+- name: Bootstrap | Install EPEL repo
+  yum:
+    name: "{{ epel_repo_url }}"
+    state: present
+  register: result
+  until: 'result.rc == 0'
+  retries: 5
+  delay: 10
+  when: not epel_repofile_result.stat.exists
+
+- name: Bootstrap | Import EPEL GPG key
+  rpm_key:
+    key: "{{ epel_repo_gpg_key_url }}"
+    state: present
+  when: not epel_repofile_result.stat.exists
+
 - name: Bootstrap | Install packages requirements for bootstrap
+  yum:
+    name: "{{ base_packages }}"
+    state: present
+  notify:
+    - Bootstrap | Handlers | Gathering facts
+
+- name: Bootstrap | Setting fact - ansible_python_interpreter
+  set_fact:
+    ansible_python_interpreter: "/usr/bin/python3"
+
+- name: Bootstrap | Install required packages
   yum:
     name: "{{ required_packages }}"
     state: present

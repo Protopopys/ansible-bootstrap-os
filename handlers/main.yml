@@ -1,2 +1,3 @@
 ---
-# handlers file for bootstrap-os
+- name: Bootstrap | Handlers | Gathering facts
+  setup: {}

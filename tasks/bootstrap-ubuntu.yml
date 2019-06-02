@@ -4,15 +4,21 @@
   register: need_bootstrap
   failed_when: false
   changed_when: false
-  with_items: "{{ required_packages }}"
+  with_items: "{{ base_packages }}"
 
-- name: Bootstrap | Install python 2.x
-  raw:
-    apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y {{ required_packages | join(" ") }}
+- name: Bootstrap | Install Python
+  raw: apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y {{ base_packages | join(" ") }}
   when:
     - need_bootstrap.results | map(attribute='rc') | sort | last | bool
 
 - name: Bootstrap | Setting fact - ansible_python_interpreter
   set_fact:
-    ansible_python_interpreter: "/usr/bin/python"
+    ansible_python_interpreter: "/usr/bin/python3"
+
+- name: Bootstrap | Install required packages
+  apt:
+    name: "{{ required_packages }}"
+    state: present
+    update_cache: true
+  notify:
+    - Bootstrap | Handlers | Gathering facts

@@ -3,4 +3,4 @@
   hosts: all
   gather_facts: false
   roles:
-    - role: bootstrap-os
+    - role: ansible-bootstrap-os
