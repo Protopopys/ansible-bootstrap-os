@@ -5,7 +5,8 @@ epel_repo_file_path: "/etc/yum.repos.d/epel.repo"
 
 base_packages:
   - sudo
-  - python36
+  - python2
+  - python2-simplejson
 
 required_packages:
   - libselinux-python
