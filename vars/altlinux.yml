@@ -1,9 +1,7 @@
 ---
-base_packages:
-  - sudo
-  - python3-base
-  - python3-module-simplejson
-
 required_packages:
   - kmod
   - dbus
+  - python
+  - python-module-apt
+  - python-module-simplejson

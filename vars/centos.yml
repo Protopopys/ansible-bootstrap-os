@@ -1,12 +1,4 @@
 ---
-base_packages:
-  - sudo
-  - python36
 required_packages:
   - libselinux-python
-  - policycoreutils-python
-  - lvm2
-  - tar
-  - unzip
-  - gzip
-  - xz
+  - epel-release
