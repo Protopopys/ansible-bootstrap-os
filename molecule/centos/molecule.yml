@@ -6,8 +6,9 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: Ubuntu18.04
-    image: ubuntu:18.04
+  - name: Centos7
+    image: centos:7
+    pre_build_image: true
 provisioner:
   name: ansible
   lint:
