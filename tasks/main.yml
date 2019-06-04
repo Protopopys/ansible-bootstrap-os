@@ -35,5 +35,6 @@
     state: directory
     mode: 0700
 
-- name: Bootstrap | flush handlers
-  meta: flush_handlers
+- name: Bootstrap | Gathering facts
+  setup:
+    filter: "*"

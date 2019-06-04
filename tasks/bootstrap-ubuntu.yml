@@ -20,5 +20,3 @@
     name: "{{ required_packages }}"
     state: present
     update_cache: true
-  notify:
-    - Bootstrap | Handlers | Gathering facts

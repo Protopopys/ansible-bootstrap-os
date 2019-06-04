@@ -21,5 +21,4 @@
     state: present
     update_cache: true
   loop: "{{ required_packages }}"
-  notify:
-    - Bootstrap | Handlers | Gathering facts
+
