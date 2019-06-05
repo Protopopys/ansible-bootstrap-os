@@ -7,3 +7,7 @@ base_packages:
 required_packages:
   - kmod
   - dbus
+  - gzip
+  - lvm2
+  - tar
+  - unzip
