@@ -1,0 +1,20 @@
+---
+language: python
+python:
+  - "2.7"
+  - "3.6"
+services:
+  - docker
+install:
+  - pip install molecule docker
+before_script:
+  - docker pull alt:8
+  - docker pull centos:7
+  - docker pull ubuntu:18.04
+  - docker pull ubuntu:16.04
+script:
+  - molecule --version
+  - ansible --version
+  - molecule test
+  - molecule test --scenario-name=ubuntu
+  - molecule test --scenario-name=alt
