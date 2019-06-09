@@ -6,7 +6,7 @@ python:
 services:
   - docker
 install:
-  - pip install molecule docker
+  - pip install testinfra molecule docker
 before_script:
   - docker pull alt:p8
   - docker pull centos:7
