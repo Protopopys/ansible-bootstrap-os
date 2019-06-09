@@ -8,7 +8,7 @@ services:
 install:
   - pip install molecule docker
 before_script:
-  - docker pull alt:8
+  - docker pull alt:p8
   - docker pull centos:7
   - docker pull ubuntu:18.04
   - docker pull ubuntu:16.04
