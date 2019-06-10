@@ -20,3 +20,4 @@
     name: "{{ required_packages }}"
     state: present
     update_cache: true
+  when: install_required_packages | lower | bool

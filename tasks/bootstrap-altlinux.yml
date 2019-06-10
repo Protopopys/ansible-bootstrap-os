@@ -21,3 +21,4 @@
     state: present
     update_cache: true
   loop: "{{ required_packages }}"
+  when: install_required_packages | lower | bool
