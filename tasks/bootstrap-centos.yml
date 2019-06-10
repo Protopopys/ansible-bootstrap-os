@@ -54,3 +54,4 @@
   until: 'result.rc == 0'
   retries: 5
   delay: 10
+  when: install_required_packages | lower | bool
