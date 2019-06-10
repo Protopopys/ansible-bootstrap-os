@@ -2,9 +2,7 @@
 Ansible Role: ansible-bootstrap-os
 =========
 
-Master: [![Build Status](https://travis-ci.org/Protopopys/ansible-bootstrap-os.svg?branch=master)](https://travis-ci.org/Protopopys/ansible-bootstrap-os)
-
-Dev:    [![Build Status](https://travis-ci.org/Protopopys/ansible-bootstrap-os.svg?branch=dev)](https://travis-ci.org/Protopopys/ansible-bootstrap-os)
+[![Build Status](https://travis-ci.org/Protopopys/ansible-bootstrap-os.svg?branch=master)](https://travis-ci.org/Protopopys/ansible-bootstrap-os)
 
 An Ansible Role that installs Python and requirements packages.
 
