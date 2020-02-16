@@ -11,8 +11,8 @@
       ubuntu
       {%- elif 'altlinux' in os_release.stdout -%}
       altlinux
-      {%- elif 'CentOS' in os_release.stdout -%}
-      centos
+      {%- elif 'CentOS' or 'Red Hat Enterprise Linux' in os_release.stdout -%}
+      rhel
       {%- endif -%}
 
 - name: loading platform variables
@@ -24,8 +24,8 @@
 - include_tasks: bootstrap-altlinux.yml
   when: os_family == "altlinux"
 
-- include_tasks: bootstrap-centos.yml
-  when: os_family == "centos"
+- include_tasks: bootstrap-rhel.yml
+  when: os_family == "rhel"
 
 - import_tasks: setup-pipelining.yml
 
@@ -33,4 +33,4 @@
   file:
     path: "{{ lookup('config', 'DEFAULT_REMOTE_TMP', on_missing='skip', wantlist=True) | first | default('~/.ansible/tmp') }}"
     state: directory
-    mode: 0700
+    mode: "0700"

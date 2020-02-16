@@ -1,2 +1,4 @@
 ---
-install_required_packages: true
+# v2 - Python2
+# v3 - Python3
+interpreter_version: v2

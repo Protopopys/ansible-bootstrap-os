@@ -1,13 +1,19 @@
 ---
-base_packages:
-  - sudo
-  - python3-base
-  - python3-module-simplejson
+python:
+  v2:
+    - python-base
+    - python-module-simplejson
+  v3:
+    - python3-base
+    - python3-module-simplejson
 
 required_packages:
-  - kmod
-  - dbus
+  - sudo
+  - sshpass
   - gzip
-  - lvm2
   - tar
   - unzip
+  - fdisk
+  - rsync
+  - wget
+  - telnet

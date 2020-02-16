@@ -37,14 +37,24 @@
     state: present
   when: not epel_repofile_result.stat.exists
 
-- name: Bootstrap | Install packages requirements for bootstrap
+- name: Bootstrap | Install Python_{{ interpreter_version }}
   yum:
-    name: "{{ base_packages }}"
+    name: "{{ python[interpreter_version] }}"
     state: present
   register: result
   until: 'result.rc == 0'
   retries: 5
   delay: 10
+
+- name: Bootstrap | Setting fact - ansible_python_interpreter
+  set_fact:
+    ansible_python_interpreter: "/usr/bin/python"
+  when: interpreter_version == 'v2'
+
+- name: Bootstrap | Setting fact - ansible_python_interpreter
+  set_fact:
+    ansible_python_interpreter: "/usr/bin/python3"
+  when: interpreter_version == 'v3'
 
 - name: Bootstrap | Install required packages
   yum:
@@ -54,4 +64,3 @@
   until: 'result.rc == 0'
   retries: 5
   delay: 10
-  when: install_required_packages | lower | bool

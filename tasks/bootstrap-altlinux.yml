@@ -4,16 +4,21 @@
   register: need_bootstrap
   failed_when: false
   changed_when: false
-  with_items: "{{ base_packages }}"
+  with_items: "{{ python[interpreter_version] }}"
 
-- name: Bootstrap | Install Python
-  raw: apt-get update && apt-get install -y {{ base_packages|join(" ") }}
+- name: Bootstrap | Install Python_{{ interpreter_version }}
+  raw: apt-get update && apt-get install -y {{ python[interpreter_version]|join(" ") }}
   when: need_bootstrap.results | map(attribute='rc') | sort | last | bool
-  with_items: "{{ base_packages }}"
+
+- name: Bootstrap | Setting fact - ansible_python_interpreter
+  set_fact:
+    ansible_python_interpreter: "/usr/bin/python"
+  when: interpreter_version == 'v2'
 
 - name: Bootstrap | Setting fact - ansible_python_interpreter
   set_fact:
     ansible_python_interpreter: "/usr/bin/python3"
+  when: interpreter_version == 'v3'
 
 - name: Bootstrap | Install required packages
   apt_rpm:
@@ -21,4 +26,3 @@
     state: present
     update_cache: true
   loop: "{{ required_packages }}"
-  when: install_required_packages | lower | bool

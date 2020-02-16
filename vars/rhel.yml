@@ -3,16 +3,21 @@ epel_repo_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ans
 epel_repo_gpg_key_url: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
 epel_repo_file_path: "/etc/yum.repos.d/epel.repo"
 
-base_packages:
-  - sudo
-  - python2
-  - python2-simplejson
+python:
+  v2:
+    - python2
+    - python2-simplejson
+    - libselinux-python
+    - policycoreutils-python
+  v3: []
 
 required_packages:
-  - libselinux-python
-  - policycoreutils-python
+  - sudo
   - lvm2
   - tar
   - unzip
   - gzip
   - xz
+  - rsync
+  - wget
+  - telnet
