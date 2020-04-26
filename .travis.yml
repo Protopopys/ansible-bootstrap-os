@@ -6,7 +6,7 @@ python:
 services:
   - docker
 install:
-  - pip install testinfra molecule docker
+  - pip install testinfra molecule docker ansible-lint
 before_script:
   - docker pull alt:p8
   - docker pull centos:7
