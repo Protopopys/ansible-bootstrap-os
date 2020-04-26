@@ -1,19 +1,30 @@
 ---
 - name: Bootstrap-OS | Check if bootstrap is needed
-  raw: PACKAGE=$(rpm -qa --qf "%{NAME}\n" |grep -e ^{{ item }}$ | tr -d '\n' | tr -d '\r') ; if [ -z "${PACKAGE}" ]; then exit 1 ; fi ;
+  raw: which python
   register: need_bootstrap
   failed_when: false
   changed_when: false
   # This command should always run, even in check mode
   check_mode: false
   environment: {}
-  loop: "{{ python.base[interpreter_version] }}"
+  when: 'interpreter_version == "v2"'
+
+- name: Bootstrap-OS | Check if bootstrap is needed
+  raw: which python3
+  register: need_bootstrap
+  failed_when: false
+  changed_when: false
+  # This command should always run, even in check mode
+  check_mode: false
+  environment: {}
+  when: 'interpreter_version == "v3"'
 
 - name: Bootstrap-OS | Install Python_{{ interpreter_version }}
   raw:
     apt-get update && \
-    apt-get install -y {{ python.base[interpreter_version]|join(" ") }}
-  when: need_bootstrap.results | map(attribute='rc') | sort | last | bool
+    DEBIAN_FRONTEND=noninteractive apt-get install -y {{ python.base[interpreter_version]|join(" ") }}
+  environment: {}
+  when: need_bootstrap.rc != 0
 
 - name: Bootstrap-OS | Setting fact - ansible_python_interpreter
   set_fact:
@@ -25,14 +36,10 @@
     ansible_python_interpreter: "/usr/bin/python3"
   when: interpreter_version == 'v3'
 
-- name: Bootstrap-OS | Install extra Python packages for AltLinux
-  apt_rpm:
+- name: Bootstrap-OS | Install required packages
+  apt:
     name: "{{ item }}"
     state: present
-  loop: "{{ python.extra[interpreter_version] }}"
-
-- name: Bootstrap-OS | Install required packages for AltLinux
-  apt_rpm:
-    name: "{{ item }}"
-    state: present
-  loop: "{{ required_packages }}"
+  loop:
+    - "{{ python.extra[interpreter_version] }}"
+    - "{{ required_packages }}"

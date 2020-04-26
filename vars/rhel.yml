@@ -4,15 +4,20 @@ epel_repo_gpg_key_url: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distributio
 epel_repo_file_path: "/etc/yum.repos.d/epel.repo"
 
 python:
-  v2:
-    - python2
-    - python2-simplejson
-    - libselinux-python
-    - policycoreutils-python
-  v3: []
+  base:
+    v2:
+      - python2
+    v3: []
+  extra:
+    v2:
+      - python2-simplejson
+      - libselinux-python
+      - policycoreutils-python
+    v3: []
 
 required_packages:
   - sudo
+  - dbus
   - lvm2
   - tar
   - unzip

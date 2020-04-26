@@ -1,4 +1,9 @@
 ---
+## CentOS/RHEL specific variables
+# Use the fastestmirror yum plugin
+centos_fastestmirror_enabled: false
+centos_epel_repo_enabled: true
+
 # v2 - Python2
 # v3 - Python3
-interpreter_version: v2
+interpreter_version: v3

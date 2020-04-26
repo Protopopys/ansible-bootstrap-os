@@ -1,6 +1,0 @@
----
-- name: Bootstrap | Remove require tty
-  lineinfile:
-    regexp: '^\w+\s+requiretty'
-    dest: /etc/sudoers
-    state: absent

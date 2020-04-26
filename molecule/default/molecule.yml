@@ -1,0 +1,41 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+verifier:
+  name: testinfra
+platforms:
+  - name: Ubuntu16.04
+    hostname: ubuntu_16.04
+    image: protopopys/systemd-ubuntu:16.04
+    pre_build_image: true
+
+  - name: Ubuntu18.04
+    hostname: ubuntu_18.04
+    image: protopopys/systemd-ubuntu:18.04
+    pre_build_image: true
+
+  - name: Ubuntu20.04
+    hostname: ubuntu_20.04
+    image: protopopys/systemd-ubuntu:20.04
+    pre_build_image: true
+
+  - name: Centos7
+    hostname: centos_7
+    image: protopopys/systemd-centos:7
+    pre_build_image: true
+
+  - name: AltLinux8
+    hostname: altlinux_8
+    image: alt:p8
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge.yml}

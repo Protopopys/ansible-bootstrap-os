@@ -1,0 +1,8 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: "Include ansible-bootstrap-os"
+      include_role:
+        name: "ansible-bootstrap-os"

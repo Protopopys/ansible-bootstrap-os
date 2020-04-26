@@ -1,66 +1,63 @@
 ---
-- name: Bootstrap | Check presence of fastestmirror.conf
+- name: Bootstrap-OS | Getting facts
+  setup:
+    filter: ansible_*
+
+- name: Bootstrap-OS | Check if EPEL repo is already configured
+  stat:
+    path: "{{ epel_repo_file_path }}"
+  register: epel_repofile_result
+  when: centos_epel_repo_enabled
+
+- name: Bootstrap-OS | Install EPEL repo
+  yum:
+    name: "{{ epel_repo_url }}"
+    state: present
+  when:
+    - centos_epel_repo_enabled
+    - not epel_repofile_result.stat.exists
+
+- name: Bootstrap-OS | Import EPEL GPG key
+  rpm_key:
+    key: "{{ epel_repo_gpg_key_url }}"
+    state: present
+  when:
+    - centos_epel_repo_enabled
+    - not epel_repofile_result.stat.exists
+
+- name: Bootstrap-OS | Check presence of fastestmirror.conf
   stat:
     path: /etc/yum/pluginconf.d/fastestmirror.conf
   register: fastestmirror
+  when: not centos_fastestmirror_enabled
 
-- name: Bootstrap | Disable fastestmirror plugin
+- name: Bootstrap-OS | Disable fastestmirror plugin if requested
   lineinfile:
     dest: /etc/yum/pluginconf.d/fastestmirror.conf
     regexp: "^enabled=.*"
     line: "enabled=0"
     state: present
-  when: fastestmirror.stat.exists
+  when:
+    - fastestmirror.stat.exists
+    - not centos_fastestmirror_enabled
 
-- name: Bootstrap | Getting facts
-  setup:
-    filter: ansible_*
-
-- name: Bootstrap | Check if EPEL repo is already configured
-  stat:
-    path: "{{ epel_repo_file_path }}"
-  register: epel_repofile_result
-
-- name: Bootstrap | Install EPEL repo
+# TODO for Centos8
+- name: Bootstrap-OS | Install Python_v2 extra packages
   yum:
-    name: "{{ epel_repo_url }}"
+    name: "{{ python.extra.v2 }}"
     state: present
-  register: result
-  until: 'result.rc == 0'
-  retries: 5
-  delay: 10
-  when: not epel_repofile_result.stat.exists
 
-- name: Bootstrap | Import EPEL GPG key
-  rpm_key:
-    key: "{{ epel_repo_gpg_key_url }}"
-    state: present
-  when: not epel_repofile_result.stat.exists
-
-- name: Bootstrap | Install Python_{{ interpreter_version }}
-  yum:
-    name: "{{ python[interpreter_version] }}"
-    state: present
-  register: result
-  until: 'result.rc == 0'
-  retries: 5
-  delay: 10
-
-- name: Bootstrap | Setting fact - ansible_python_interpreter
+- name: Bootstrap-OS | Setting fact - ansible_python_interpreter
   set_fact:
     ansible_python_interpreter: "/usr/bin/python"
-  when: interpreter_version == 'v2'
+#  when: interpreter_version == 'v2'
 
-- name: Bootstrap | Setting fact - ansible_python_interpreter
-  set_fact:
-    ansible_python_interpreter: "/usr/bin/python3"
-  when: interpreter_version == 'v3'
+# - name: Bootstrap-OS | Setting fact - ansible_python_interpreter
+#  set_fact:
+#    ansible_python_interpreter: "/usr/bin/python3"
+#  when: interpreter_version == 'v3'
 
-- name: Bootstrap | Install required packages
+- name: Bootstrap-OS | Install required packages
   yum:
     name: "{{ required_packages }}"
     state: present
-  register: result
-  until: 'result.rc == 0'
-  retries: 5
-  delay: 10
